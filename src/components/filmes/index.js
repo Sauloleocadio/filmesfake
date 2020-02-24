@@ -1,5 +1,13 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Modal,
+  Button,
+} from 'react-native';
 import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
 
 class Filmes extends Component {
@@ -7,11 +15,27 @@ class Filmes extends Component {
     super(props);
     this.state = {
       visible: false,
+      modalVisible: false,
     };
+
+    this.entrar = this.entrar.bind(this);
+    this.voltar = this.voltar.bind(this);
   }
 
   componentDidMount() {
     setTimeout(() => this.setState({visible: !this.state.visible}), 2000);
+  }
+
+  entrar() {
+    this.setState({
+      modalVisible: true,
+    });
+  }
+
+  voltar(visible) {
+    this.setState({
+      modalVisible: visible,
+    });
   }
 
   render() {
@@ -28,13 +52,27 @@ class Filmes extends Component {
           </ShimmerPlaceHolder>
 
           <View style={styles.areaBotao}>
-            <TouchableOpacity
-              style={styles.botao}
-              onPress={() => alert(sinopse)}>
+            <TouchableOpacity style={styles.botao} onPress={this.entrar}>
               <Text style={styles.botaoTexto}>LEIA MAIS</Text>
             </TouchableOpacity>
           </View>
         </View>
+
+        <Modal
+          transparent={true}
+          animationType="slide"
+          visible={this.state.modalVisible}>
+          <View style={styles.cardModal}>
+            <Text style={styles.tituloModal}>{nome}</Text>
+            <Text style={styles.textoModal}>{sinopse}</Text>
+            <Button
+              // style={styles.botaoModal}
+              title="Voltar"
+              onPress={() => this.voltar(false)}
+              color={'#be2edd'}
+            />
+          </View>
+        </Modal>
       </View>
     );
   }
@@ -80,6 +118,32 @@ const styles = StyleSheet.create({
   shimmer: {
     height: 250,
     width: 330,
+  },
+  cardModal: {
+    backgroundColor: '#f7f7f7',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    // width: '100%',
+    // height: 350,
+    borderRadius: 15,
+  },
+  tituloModal: {
+    fontSize: 27,
+    fontStyle: 'italic',
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 10,
+    color: '#be2edd',
+    textAlign: 'center',
+  },
+  textoModal: {
+    fontSize: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 15,
+    textAlign: 'center',
+    fontWeight: 'bold',
   },
 });
 
